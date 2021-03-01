@@ -10,7 +10,7 @@ type Memory_t struct {
 	Total uint64
 	SwapFree uint64
 	SwapTotal uint64
-	Mu sync.Mutex
+	mu sync.Mutex
 }
 
 func Get() (*Memory_t, error) {
@@ -22,9 +22,9 @@ func Get() (*Memory_t, error) {
 		return nil, err
 	}
 
-	defer memoryInfo.Mu.Unlock()
+	defer memoryInfo.mu.Unlock()
 
-	memoryInfo.Mu.Lock()
+	memoryInfo.mu.Lock()
 	memoryInfo.Free = uint64(sysInfo.Freeram)
 	memoryInfo.Total = uint64(sysInfo.Totalram)
 	memoryInfo.SwapFree = uint64(sysInfo.Freeswap)
